@@ -1,0 +1,126 @@
+// 音乐项目的数据类型定义
+export interface MusicItem {
+  id: string;           // 唯一ID
+  name: string;         // 歌曲名称
+  artist: string;       // 歌手名称
+  album?: string;       // 专辑名称
+  notes?: string;       // 备注信息
+  downloadUrl?: string; // 下载地址
+  imageUrl?: string;    // 来源图片地址
+  priority: 'normal' | 'important' | 'urgent'; // 优先级
+  completed: boolean;   // 是否已完成
+  createdAt: number;    // 创建时间戳
+  completedAt?: number; // 完成时间戳
+}
+
+// 本地存储的键
+const MUSIC_ITEMS_KEY = 'music_items';
+
+// 音乐数据服务
+export class MusicService {
+  private items: MusicItem[] = [];
+
+  // 初始化，从本地存储加载数据
+  init(): void {
+    try {
+      const storageData = wx.getStorageSync(MUSIC_ITEMS_KEY);
+      if (storageData) {
+        this.items = JSON.parse(storageData);
+      }
+    } catch (e) {
+      console.error('加载音乐数据失败', e);
+      this.items = [];
+    }
+  }
+
+  // 保存数据到本地存储
+  private save(): void {
+    try {
+      wx.setStorageSync(MUSIC_ITEMS_KEY, JSON.stringify(this.items));
+    } catch (e) {
+      console.error('保存音乐数据失败', e);
+    }
+  }
+
+  // 获取所有未完成的音乐项目
+  getIncompleteItems(): MusicItem[] {
+    return this.items.filter(item => !item.completed)
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  // 获取所有已完成的音乐项目
+  getCompletedItems(): MusicItem[] {
+    return this.items.filter(item => item.completed)
+      .sort((a, b) => (b.completedAt || 0) - (a.completedAt || 0));
+  }
+
+  // 根据ID获取单个音乐项目
+  getItemById(id: string): MusicItem | undefined {
+    return this.items.find(item => item.id === id);
+  }
+
+  // 添加新的音乐项目
+  addItem(item: Omit<MusicItem, 'id' | 'createdAt' | 'completed'>): MusicItem {
+    const newItem: MusicItem = {
+      ...item,
+      id: this.generateId(),
+      createdAt: Date.now(),
+      completed: false
+    };
+    
+    this.items.push(newItem);
+    this.save();
+    
+    return newItem;
+  }
+
+  // 更新音乐项目
+  updateItem(id: string, updates: Partial<MusicItem>): MusicItem | undefined {
+    const index = this.items.findIndex(item => item.id === id);
+    if (index === -1) {
+      return undefined;
+    }
+
+    this.items[index] = { ...this.items[index], ...updates };
+    this.save();
+    
+    return this.items[index];
+  }
+
+  // 标记为已完成
+  markAsCompleted(id: string): MusicItem | undefined {
+    return this.updateItem(id, {
+      completed: true,
+      completedAt: Date.now()
+    });
+  }
+
+  // 标记为未完成
+  markAsIncomplete(id: string): MusicItem | undefined {
+    return this.updateItem(id, {
+      completed: false,
+      completedAt: undefined
+    });
+  }
+
+  // 删除音乐项目
+  deleteItem(id: string): boolean {
+    const index = this.items.findIndex(item => item.id === id);
+    if (index === -1) {
+      return false;
+    }
+
+    this.items.splice(index, 1);
+    this.save();
+    
+    return true;
+  }
+
+  // 生成唯一ID
+  private generateId(): string {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+  }
+}
+
+// 创建单例实例
+export const musicService = new MusicService(); 

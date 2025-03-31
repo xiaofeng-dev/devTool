@@ -1,0 +1,72 @@
+<view class="container">
+  <view class="form-group">
+    <!-- 上传图片区域 -->
+    <view class="upload-section">
+      <view class="upload-preview" bindtap="chooseImage">
+        <image wx:if="{{tempImageUrl}}" src="{{tempImageUrl}}" mode="aspectFill"></image>
+        <view wx:else class="upload-placeholder">
+          <text class="upload-icon">📷</text>
+          <text class="upload-text">点击上传图片</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 表单区域 -->
+    <view class="form-item">
+      <view class="form-label">歌曲名称 <text class="required">*</text></view>
+      <input class="form-input" 
+             placeholder="请输入歌曲名称" 
+             value="{{formData.name}}"
+             bindinput="inputName" />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">歌手 <text class="required">*</text></view>
+      <input class="form-input" 
+             placeholder="请输入歌手名称" 
+             value="{{formData.artist}}"
+             bindinput="inputArtist" />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">专辑</view>
+      <input class="form-input" 
+             placeholder="请输入专辑名称" 
+             value="{{formData.album}}"
+             bindinput="inputAlbum" />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">备注</view>
+      <textarea class="form-textarea" 
+                placeholder="请输入备注信息" 
+                value="{{formData.notes}}"
+                bindinput="inputNotes" />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">优先级</view>
+      <view class="priority-group">
+        <view class="priority-item {{formData.priority === 'normal' ? 'active' : ''}}" 
+              bindtap="setPriority" 
+              data-priority="normal">
+          普通
+        </view>
+        <view class="priority-item {{formData.priority === 'important' ? 'active' : ''}}" 
+              bindtap="setPriority" 
+              data-priority="important">
+          重要
+        </view>
+        <view class="priority-item {{formData.priority === 'urgent' ? 'active' : ''}}" 
+              bindtap="setPriority" 
+              data-priority="urgent">
+          紧急
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="form-actions">
+    <button class="btn-primary" bindtap="saveMusic">保存</button>
+  </view>
+</view> 

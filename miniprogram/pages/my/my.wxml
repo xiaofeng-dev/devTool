@@ -1,0 +1,53 @@
+<view class="container">
+  <view class="header">
+    <view class="avatar-wrapper">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default_avatar.png'}}"></image>
+    </view>
+    <view class="user-info">
+      <view class="nickname">{{userInfo.nickName || '音乐查找助手用户'}}</view>
+      <button 
+        wx:if="{{!hasUserInfo}}" 
+        class="login-btn" 
+        bindtap="getUserProfile">点击登录</button>
+    </view>
+  </view>
+
+  <view class="stats-section">
+    <view class="stats-item">
+      <view class="stats-value">{{incompleteCount}}</view>
+      <view class="stats-label">待完成</view>
+    </view>
+    <view class="divider"></view>
+    <view class="stats-item">
+      <view class="stats-value">{{completedCount}}</view>
+      <view class="stats-label">已完成</view>
+    </view>
+    <view class="divider"></view>
+    <view class="stats-item">
+      <view class="stats-value">{{totalCount}}</view>
+      <view class="stats-label">总计</view>
+    </view>
+  </view>
+
+  <view class="menu-list">
+    <view class="menu-item" bindtap="goToAbout">
+      <text class="menu-icon">ℹ️</text>
+      <text class="menu-text">关于应用</text>
+      <text class="menu-arrow">〉</text>
+    </view>
+    <view class="menu-item" bindtap="showFeedback">
+      <text class="menu-icon">📝</text>
+      <text class="menu-text">意见反馈</text>
+      <text class="menu-arrow">〉</text>
+    </view>
+    <view class="menu-item" bindtap="clearData">
+      <text class="menu-icon">🗑️</text>
+      <text class="menu-text">清空数据</text>
+      <text class="menu-arrow">〉</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <text class="version">版本 1.0.0</text>
+  </view>
+</view> 

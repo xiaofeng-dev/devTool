@@ -1,0 +1,71 @@
+<view class="container">
+  <view class="back-nav" bindtap="navigateBack">
+    <view class="back-arrow">←</view>
+    <view class="back-text">返回</view>
+  </view>
+
+  <!-- 加载中状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-icon"></view>
+    <view class="loading-text">正在加载音乐详情...</view>
+  </view>
+
+  <!-- 音乐详情 -->
+  <view class="music-detail" wx:elif="{{item}}">
+    <view class="detail-header">
+      <view class="item-cover">
+        <image wx:if="{{item.imageUrl}}" src="{{item.imageUrl}}" mode="aspectFill"></image>
+        <view wx:else class="cover-placeholder"></view>
+      </view>
+      <view class="item-info">
+        <view class="item-title">{{item.name}}</view>
+        <view class="item-subtitle">{{item.artist}}</view>
+        <view class="item-album" wx:if="{{item.album}}">专辑：{{item.album}}</view>
+        <view class="item-status {{item.completed ? 'completed' : 'incomplete'}}">
+          {{item.completed ? '已完成' : '未完成'}}
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-section">
+      <view class="section-title">请求信息</view>
+      <view class="section-content">
+        <view class="info-item">
+          <view class="info-label">请求时间</view>
+          <view class="info-value">{{formatDateTime(item.createdAt)}}</view>
+        </view>
+        <view class="info-item" wx:if="{{item.completedAt}}">
+          <view class="info-label">完成时间</view>
+          <view class="info-value">{{formatDateTime(item.completedAt)}}</view>
+        </view>
+        <view class="info-item">
+          <view class="info-label">优先级</view>
+          <view class="info-value priority-{{item.priority}}">
+            {{item.priority === 'urgent' ? '紧急' : item.priority === 'important' ? '重要' : '普通'}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-section">
+      <view class="section-title">备注</view>
+      <view class="section-content notes">
+        {{item.notes || '无备注'}}
+      </view>
+    </view>
+
+    <view class="detail-section" wx:if="{{item.completed && item.downloadUrl}}">
+      <view class="section-title">下载链接</view>
+      <view class="section-content download-url">
+        <text selectable="true">{{item.downloadUrl}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未找到数据 -->
+  <view class="empty-container" wx:else>
+    <icon type="warn" size="64" color="#D33A31"></icon>
+    <view class="empty-text">未找到音乐信息</view>
+    <view class="back-btn" bindtap="navigateBack">返回列表</view>
+  </view>
+</view> 

@@ -1,0 +1,115 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- 顶部标签页 -->
+  <view class="tabs">
+    <view class="tab {{activeTab === 'incomplete' ? 'active' : ''}}" 
+          bindtap="switchTab" 
+          data-tab="incomplete">
+      未完成({{incompleteItems.length}})
+    </view>
+    <view class="tab {{activeTab === 'completed' ? 'active' : ''}}" 
+          bindtap="switchTab" 
+          data-tab="completed">
+      已完成({{completedItems.length}})
+    </view>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <view class="search-input">
+      <icon type="search" size="14" color="#999"></icon>
+      <input placeholder="搜索歌曲名称或歌手" 
+             bindinput="onSearchInput"
+             value="{{searchText}}"/>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content-area">
+    <!-- 未完成列表 -->
+    <scroll-view 
+      scroll-y 
+      class="music-list" 
+      wx:if="{{activeTab === 'incomplete'}}"
+      scroll-top="{{incompleteScrollTop}}"
+      bindscroll="onIncompleteScroll"
+      enhanced="true"
+      show-scrollbar="false"
+      bounces="true"
+      enable-back-to-top="true"
+      id="incompleteScroll">
+      <block wx:if="{{displayIncompleteItems.length > 0}}">
+        <view class="list-item" 
+              wx:for="{{displayIncompleteItems}}" 
+              wx:key="id"
+              bindtap="goToDetail"
+              data-id="{{item.id}}">
+          <view class="item-cover">
+            <image wx:if="{{item.imageUrl}}" src="{{item.imageUrl}}" mode="aspectFill"></image>
+            <view wx:else class="cover-placeholder"></view>
+          </view>
+          <view class="list-item-content">
+            <view class="item-title">{{item.name}}</view>
+            <view class="item-subtitle">{{item.artist}}{{item.album ? ' · ' + item.album : ''}}</view>
+            <view class="item-date">{{formatDate(item.createdAt)}}</view>
+          </view>
+          <view class="item-arrow">
+            <text class="arrow">〉</text>
+          </view>
+        </view>
+      </block>
+      <view wx:elif="{{incompleteLoading}}" class="loading-tip">
+        <view class="loading-icon"></view>
+        正在加载数据...
+      </view>
+      <view wx:else class="empty-tip">暂无未完成的音乐请求</view>
+    </scroll-view>
+
+    <!-- 已完成列表 -->
+    <scroll-view 
+      scroll-y 
+      class="music-list" 
+      wx:if="{{activeTab === 'completed'}}"
+      scroll-top="{{completedScrollTop}}"
+      bindscroll="onCompletedScroll"
+      enhanced="true"
+      show-scrollbar="false"
+      bounces="true"
+      enable-back-to-top="true"
+      id="completedScroll">
+      <block wx:if="{{displayCompletedItems.length > 0}}">
+        <view class="list-item" 
+              wx:for="{{displayCompletedItems}}" 
+              wx:key="id"
+              bindtap="goToDetail"
+              data-id="{{item.id}}">
+          <view class="item-cover">
+            <image wx:if="{{item.imageUrl}}" src="{{item.imageUrl}}" mode="aspectFill"></image>
+            <view wx:else class="cover-placeholder"></view>
+          </view>
+          <view class="list-item-content">
+            <view class="item-title">{{item.name}}</view>
+            <view class="item-subtitle">{{item.artist}}{{item.album ? ' · ' + item.album : ''}}</view>
+            <view class="item-date">完成于：{{formatDate(item.completedAt)}}</view>
+          </view>
+          <view class="item-completed">
+            <icon type="success" size="16" color="#52c41a"></icon>
+          </view>
+          <view class="item-arrow">
+            <text class="arrow">〉</text>
+          </view>
+        </view>
+      </block>
+      <view wx:elif="{{completedLoading}}" class="loading-tip">
+        <view class="loading-icon"></view>
+        正在加载数据...
+      </view>
+      <view wx:else class="empty-tip">暂无已完成的音乐请求</view>
+    </scroll-view>
+  </view>
+
+  <!-- 回顶部按钮 -->
+  <view class="back-to-top" bindtap="backToTop" wx:if="{{showBackToTop}}">
+    <view class="back-to-top-icon">↑</view>
+  </view>
+</view>

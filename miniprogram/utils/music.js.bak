@@ -1,0 +1,205 @@
+// 本地存储的键
+var MUSIC_ITEMS_KEY = 'music_items';
+
+// 极简版本音乐服务
+var musicService = {};
+
+// 模拟数据 - 未完成的音乐项目
+musicService.incompleteItems = [
+  {
+    id: "1",
+    name: "无条件",
+    artist: "陈奕迅",
+    album: "rice & shine",
+    notes: "朋友说这首歌很好听，想要无损版",
+    imageUrl: "",
+    downloadUrl: "",
+    priority: "normal",
+    createdAt: 1684454400000,
+    completed: false
+  },
+  {
+    id: "2",
+    name: "岁月如歌",
+    artist: "莫文蔚",
+    album: "我们在中场相遇",
+    notes: "想要高音质版本",
+    imageUrl: "",
+    downloadUrl: "",
+    priority: "important",
+    createdAt: 1684281600000,
+    completed: false
+  },
+  {
+    id: "3",
+    name: "春风十里",
+    artist: "鹿先森乐队",
+    album: "所有的酒，都不如你",
+    notes: "需要320kbps以上音质",
+    imageUrl: "",
+    downloadUrl: "",
+    priority: "normal",
+    createdAt: 1684108800000,
+    completed: false
+  }
+];
+
+// 模拟数据 - 已完成的音乐项目
+musicService.completedItems = [
+  {
+    id: "4",
+    name: "句号",
+    artist: "G.E.M.邓紫棋",
+    album: "摩天动物园",
+    notes: "朋友想要MV和无损音质版本",
+    imageUrl: "",
+    downloadUrl: "https://music.example.com/download/12345",
+    priority: "normal",
+    createdAt: 1684195200000,
+    completedAt: 1684368000000,
+    completed: true
+  },
+  {
+    id: "5",
+    name: "生活不止眼前的苟且",
+    artist: "许巍",
+    album: "无尽光芒",
+    notes: "想要完整专辑",
+    imageUrl: "",
+    downloadUrl: "https://music.example.com/download/67890",
+    priority: "important",
+    createdAt: 1684022400000,
+    completedAt: 1684195200000,
+    completed: true
+  },
+  {
+    id: "6",
+    name: "稻香",
+    artist: "周杰伦",
+    album: "魔杰座",
+    notes: "想要无损音质",
+    imageUrl: "",
+    downloadUrl: "https://music.example.com/download/54321",
+    priority: "urgent",
+    createdAt: 1683849600000,
+    completedAt: 1684022400000,
+    completed: true
+  }
+];
+
+// 初始化
+musicService.init = function() {
+  console.log("音乐服务初始化完成");
+};
+
+// 获取所有未完成的音乐项目
+musicService.getIncompleteItems = function() {
+  return this.incompleteItems;
+};
+
+// 获取所有已完成的音乐项目
+musicService.getCompletedItems = function() {
+  return this.completedItems;
+};
+
+// 根据ID获取单个音乐项目
+musicService.getItemById = function(id) {
+  var i;
+  for (i = 0; i < this.incompleteItems.length; i++) {
+    if (this.incompleteItems[i].id === id) {
+      return this.incompleteItems[i];
+    }
+  }
+  for (i = 0; i < this.completedItems.length; i++) {
+    if (this.completedItems[i].id === id) {
+      return this.completedItems[i];
+    }
+  }
+  return null;
+};
+
+// 添加新的音乐项目 (静态版本)
+musicService.addItem = function(item) {
+  console.log("添加音乐项目（静态版本）");
+  var newId = "new-" + Math.floor(Math.random() * 10000);
+  var newItem = {
+    id: newId,
+    name: item.name,
+    artist: item.artist,
+    album: item.album || "",
+    notes: item.notes || "",
+    priority: item.priority,
+    imageUrl: item.imageUrl || "",
+    downloadUrl: item.downloadUrl || "",
+    createdAt: new Date().getTime(),
+    completed: false
+  };
+  return newItem;
+};
+
+// 更新音乐项目 (静态版本)
+musicService.updateItem = function(id, updates) {
+  console.log("更新音乐项目（静态版本）");
+  var item = this.getItemById(id);
+  if (!item) {
+    return null;
+  }
+  
+  var result = {};
+  var key;
+  for (key in item) {
+    if (item.hasOwnProperty(key)) {
+      result[key] = item[key];
+    }
+  }
+  for (key in updates) {
+    if (updates.hasOwnProperty(key)) {
+      result[key] = updates[key];
+    }
+  }
+  return result;
+};
+
+// 标记为已完成 (静态版本)
+musicService.markAsCompleted = function(id) {
+  console.log("标记为已完成（静态版本）");
+  var item = this.getItemById(id);
+  if (!item) {
+    return null;
+  }
+  
+  var result = {};
+  var key;
+  for (key in item) {
+    if (item.hasOwnProperty(key)) {
+      result[key] = item[key];
+    }
+  }
+  result.completed = true;
+  result.completedAt = new Date().getTime();
+  
+  return result;
+};
+
+// 标记为未完成 (静态版本)
+musicService.markAsIncomplete = function(id) {
+  console.log("标记为未完成（静态版本）");
+  var item = this.getItemById(id);
+  if (!item) {
+    return null;
+  }
+  
+  var result = {};
+  var key;
+  for (key in item) {
+    if (item.hasOwnProperty(key)) {
+      result[key] = item[key];
+    }
+  }
+  result.completed = false;
+  result.completedAt = undefined;
+  
+  return result;
+};
+
+exports.musicService = musicService; 
