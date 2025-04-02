@@ -138,5 +138,47 @@ Page({
 
     // 执行保存
     saveData();
+  },
+
+  // 添加分享功能
+  onShareAppMessage: function() {
+    return {
+      title: '添加新的音乐请求',
+      path: '/pages/add/add',
+      success: function(res) {
+        console.log('分享成功', res);
+      },
+      fail: function(res) {
+        console.log('分享失败', res);
+      }
+    };
+  },
+
+  // 分享到朋友圈
+  onShareTimeline: function() {
+    return {
+      title: '添加新的音乐请求',
+      query: '',
+      success: function(res) {
+        console.log('分享朋友圈成功', res);
+      },
+      fail: function(res) {
+        console.log('分享朋友圈失败', res);
+      }
+    };
+  },
+
+  onLoad: function() {
+    // 启用分享功能
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline'],
+      success: function() {
+        console.log('显示分享菜单成功');
+      },
+      fail: function(err) {
+        console.log('显示分享菜单失败', err);
+      }
+    });
   }
 }); 

@@ -20,7 +20,9 @@
     "ignoreUploadUnusedFiles": true,
     "compileHotReLoad": false,
     "skylineRenderEnable": true,
-    "es6": true
+    "es6": true,
+    "urlCheck": true,
+    "checkSiteMap": true
   },
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
@@ -30,7 +32,7 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "libVersion": "trial",
+  "libVersion": "2.30.2",
   "packOptions": {
     "ignore": [],
     "include": []

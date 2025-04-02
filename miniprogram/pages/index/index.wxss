@@ -273,3 +273,28 @@
     transform: rotate(360deg);
   }
 }
+
+/* 添加自定义分享按钮样式 */
+.custom-share-btn {
+  position: fixed;
+  right: 30rpx;
+  bottom: 120rpx;
+  background-color: #D33A31;
+  color: white;
+  padding: 15rpx 30rpx;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  z-index: 999;
+}
+
+.share-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 10rpx;
+}
+
+.custom-share-btn text {
+  font-size: 28rpx;
+}

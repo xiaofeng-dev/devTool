@@ -38,5 +38,25 @@
   },
   "style": "v2",
   "componentFramework": "glass-easel",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json",
+  "useExtendedLib": {
+    "weui": true
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用于获取附近的音乐资源"
+    }
+  },
+  "requiredBackgroundModes": ["audio"],
+  "resizable": true,
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "enableShareTimeline": true,
+  "enableShareAppMessage": true,
+  "shareTimelineOptions": {
+    "useContentShareButton": true
+  }
 }

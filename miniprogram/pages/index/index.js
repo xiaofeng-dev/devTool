@@ -1,5 +1,7 @@
 var formatTime = require('../../utils/util').formatTime;
 var musicService = require('../../utils/music').musicService;
+var share = require('../../utils/share');
+var util = require('../../utils/util.js');
 
 // 获取应用实例
 var app = getApp();
@@ -7,7 +9,8 @@ var app = getApp();
 // 显示回顶部按钮的滚动阈值
 var SCROLL_THRESHOLD = 200;
 
-Page({
+// 使用全局分享配置
+Page(app.applyShareConfig({
   data: {
     activeTab: 'incomplete',
     incompleteItems: [],
@@ -21,10 +24,30 @@ Page({
     // 滚动相关
     incompleteScrollTop: 0,
     completedScrollTop: 0,
-    showBackToTop: false
+    showBackToTop: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    currentTab: 0, // 0: 未完成, 1: 已完成
+    // 未完成项相关数据
+    incompleteCurrentPage: 1,
+    incompleteTotalPages: 1,
+    incompleteSearchText: '',
+    incompleteSearchMode: false,
+    // 已完成项相关数据
+    completedCurrentPage: 1,
+    completedTotalPages: 1,
+    completedSearchText: '',
+    completedSearchMode: false
   },
 
   onLoad: function() {
+    // 设置分享信息
+    share.setShareInfo({
+      title: '音乐查找助手 - 首页',
+      desc: '快速整理和下载您喜欢的音乐',
+      path: '/pages/index/index',
+      imageUrl: '/images/home_selected.png'
+    });
+    
     // 加载初始数据
     this.loadDataForCurrentTab();
   },
@@ -32,24 +55,6 @@ Page({
   onShow: function() {
     // 每次页面显示时重新加载当前标签页的数据
     this.loadDataForCurrentTab();
-  },
-
-  // 分享功能
-  onShareAppMessage: function() {
-    return {
-      title: '音乐下载请求小助手',
-      path: '/pages/index/index',
-      imageUrl: '/images/share_cover.png' // 可选，分享图片
-    }
-  },
-
-  // 分享到朋友圈
-  onShareTimeline: function() {
-    return {
-      title: '音乐下载请求小助手',
-      query: '',
-      imageUrl: '/images/share_cover.png' // 可选，分享图片
-    }
   },
 
   // 加载当前标签页的数据
@@ -62,7 +67,7 @@ Page({
   },
 
   // 加载未完成的音乐数据
-  loadIncompleteData: function() {
+  loadIncompleteData: function(page = 1, searchText = '') {
     // 设置加载状态
     this.setData({ incompleteLoading: true });
     
@@ -74,8 +79,8 @@ Page({
     
     try {
       // 如果有搜索关键词，使用搜索接口
-      if (this.data.searchText) {
-        var result = musicService.searchIncompleteItems(this.data.searchText);
+      if (searchText) {
+        var result = musicService.searchIncompleteItems(searchText);
         
         this.setData({
           incompleteItems: result.items,
@@ -234,4 +239,4 @@ Page({
     var date = new Date(timestamp);
     return date.getMonth() + 1 + '-' + date.getDate();
   }
-}); 
+})); 
