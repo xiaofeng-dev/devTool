@@ -40,6 +40,12 @@ Page(app.applyShareConfig({
   },
 
   onLoad: function() {
+    // 启用分享功能，并开启群分享
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
+    });
+    
     // 设置分享信息
     share.setShareInfo({
       title: '音乐查找助手 - 首页',

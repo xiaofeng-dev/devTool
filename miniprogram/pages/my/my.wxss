@@ -49,6 +49,19 @@
   display: inline-block;
 }
 
+.logout-btn {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #fff;
+  font-size: 14px;
+  padding: 0 12px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  width: auto;
+  display: inline-block;
+}
+
 /* 统计数据 */
 .stats-section {
   display: flex;
@@ -99,6 +112,15 @@
 .menu-icon {
   margin-right: 10px;
   font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.icon {
+  vertical-align: middle;
 }
 
 .menu-text {

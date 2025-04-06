@@ -11,18 +11,38 @@
   </view>
 
   <!-- 音乐详情 -->
-  <view class="music-detail" wx:elif="{{item}}">
+  <view class="music-detail" wx:elif="{{musicItem}}">
     <view class="detail-header">
-      <view class="item-cover">
-        <image wx:if="{{item.imageUrl}}" src="{{item.imageUrl}}" mode="aspectFill"></image>
-        <view wx:else class="cover-placeholder"></view>
+      <view class="item-cover" bindtap="chooseImage">
+        <image wx:if="{{musicItem.imageUrl}}" src="{{musicItem.imageUrl}}" mode="aspectFill"></image>
+        <view wx:else class="cover-placeholder">
+          <text class="upload-icon">📷</text>
+          <text class="upload-text">点击更换</text>
+        </view>
+        <view class="edit-cover" wx:if="{{isEditMode}}">点击更换封面</view>
       </view>
       <view class="item-info">
-        <view class="item-title">{{item.name}}</view>
-        <view class="item-subtitle">{{item.artist}}</view>
-        <view class="item-album" wx:if="{{item.album}}">专辑：{{item.album}}</view>
-        <view class="item-status {{item.completed ? 'completed' : 'incomplete'}}">
-          {{item.completed ? '已完成' : '未完成'}}
+        <view class="item-field" wx:if="{{!isEditMode}}">
+          <view class="item-title">{{musicItem.name}}</view>
+          <view class="item-subtitle">{{musicItem.artist}}</view>
+          <view class="item-album" wx:if="{{musicItem.album}}">专辑：{{musicItem.album}}</view>
+        </view>
+        <view class="item-field-edit" wx:else>
+          <view class="field-row">
+            <view class="field-label">名称:</view>
+            <input class="field-input" value="{{musicItem.name}}" bindinput="onNameChange" placeholder="输入名称"/>
+          </view>
+          <view class="field-row">
+            <view class="field-label">歌手:</view>
+            <input class="field-input" value="{{musicItem.artist}}" bindinput="onArtistChange" placeholder="输入歌手名"/>
+          </view>
+          <view class="field-row">
+            <view class="field-label">专辑:</view>
+            <input class="field-input" value="{{musicItem.album}}" bindinput="onAlbumChange" placeholder="输入专辑名"/>
+          </view>
+        </view>
+        <view class="item-status {{musicItem.flag ? 'completed' : 'incomplete'}}">
+          {{musicItem.flag ? '已完成' : '未完成'}}
         </view>
       </view>
     </view>
@@ -30,18 +50,25 @@
     <view class="detail-section">
       <view class="section-title">请求信息</view>
       <view class="section-content">
-        <view class="info-item">
-          <view class="info-label">请求时间</view>
-          <view class="info-value">{{formatDateTime(item.createdAt)}}</view>
-        </view>
-        <view class="info-item" wx:if="{{item.completedAt}}">
+        <view class="info-item" wx:if="{{musicItem.flag && musicItem.updateTime}}">
           <view class="info-label">完成时间</view>
-          <view class="info-value">{{formatDateTime(item.completedAt)}}</view>
+          <view class="info-value">{{formatDateTime(musicItem.updateTime)}}</view>
         </view>
         <view class="info-item">
           <view class="info-label">优先级</view>
-          <view class="info-value priority-{{item.priority}}">
-            {{item.priority === 'urgent' ? '紧急' : item.priority === 'important' ? '重要' : '普通'}}
+          <view class="info-value" wx:if="{{!isEditMode}}">
+            <view class="priority-tag priority-{{getPriorityFromLevel(musicItem.level)}}">
+              {{musicItem.level == '3' ? '紧急' : (musicItem.level == '2' ? '重要' : '普通')}}
+            </view>
+          </view>
+          <view class="info-value" wx:else>
+            <picker bindchange="onLevelChange" value="{{priorityIndex}}" range="{{priorityOptions}}">
+              <view class="picker">
+                <view class="priority-tag priority-{{getPriorityFromLevel(musicItem.level)}}">
+                  {{priorityOptions[priorityIndex]}}
+                </view>
+              </view>
+            </picker>
           </view>
         </view>
       </view>
@@ -50,15 +77,27 @@
     <view class="detail-section">
       <view class="section-title">备注</view>
       <view class="section-content notes">
-        {{item.notes || '无备注'}}
+        <view wx:if="{{!isEditMode}}">{{musicItem.remark || '无备注'}}</view>
+        <textarea wx:else class="remark-textarea" value="{{musicItem.remark}}" bindinput="onRemarkChange" placeholder="输入备注信息"/>
       </view>
     </view>
 
-    <view class="detail-section" wx:if="{{item.completed && item.downloadUrl}}">
-      <view class="section-title">下载链接</view>
+    <view class="detail-section" wx:if="{{musicItem.fileUrl}}">
+      <view class="section-title">音乐文件</view>
       <view class="section-content download-url">
-        <text selectable="true">{{item.downloadUrl}}</text>
+        <text selectable="true" class="file-url">{{musicItem.fileUrl}}</text>
+        <view class="file-actions">
+          <button class="action-btn btn-open" bindtap="openMusicFile">播放</button>
+          <button class="action-btn btn-copy" bindtap="copyDownloadUrl">复制链接</button>
+        </view>
       </view>
+    </view>
+    
+    <view class="action-buttons">
+      <button class="btn-edit" bindtap="toggleEditMode">
+        {{isEditMode ? '取消' : '编辑信息'}}
+      </button>
+      <button wx:if="{{isEditMode}}" class="btn-save" bindtap="saveChanges">保存</button>
     </view>
   </view>
 

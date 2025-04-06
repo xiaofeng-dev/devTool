@@ -99,11 +99,94 @@
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: #999;
   font-size: 14px;
   background-color: #f5f5f5;
+}
+
+.edit-cover {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  padding: 4px 0;
+}
+
+.upload-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.upload-text {
+  font-size: 12px;
+}
+
+.item-field-edit {
+  width: 100%;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.field-label {
+  width: 50px;
+  font-size: 14px;
+  color: #666;
+}
+
+.field-input {
+  flex: 1;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.priority-tag {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.priority-urgent {
+  background-color: #fff1f0;
+  color: #f5222d;
+}
+
+.priority-important {
+  background-color: #fff7e6;
+  color: #fa8c16;
+}
+
+.priority-normal {
+  background-color: #f6ffed;
+  color: #52c41a;
+}
+
+.picker {
+  display: flex;
+  align-items: center;
+}
+
+.remark-textarea {
+  width: 100%;
+  height: 100px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 .item-info {
@@ -192,18 +275,6 @@
   font-size: 14px;
 }
 
-.priority-urgent {
-  color: #f5222d;
-}
-
-.priority-important {
-  color: #fa8c16;
-}
-
-.priority-normal {
-  color: #52c41a;
-}
-
 .notes {
   padding: 12px 0;
   color: #333;
@@ -241,4 +312,87 @@
   color: white;
   border-radius: 5px;
   font-size: 14px;
+}
+
+.copy-btn {
+  margin-top: 12px;
+  background-color: #D33A31;
+  color: white;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  width: auto !important;
+  display: inline-block;
+}
+
+.action-buttons {
+  margin-top: 30px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.btn-edit {
+  background-color: #1890ff;
+  color: white;
+  font-size: 16px;
+  border-radius: 4px;
+  padding: 10px 0;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.btn-save {
+  background-color: #52c41a;
+  color: white;
+  font-size: 16px;
+  border-radius: 4px;
+  padding: 10px 0;
+  flex: 1;
+  margin-left: 10px;
+}
+
+.btn-status {
+  background-color: #D33A31;
+  color: white;
+  font-size: 16px;
+  border-radius: 4px;
+  padding: 10px 0;
+  flex: 1;
+}
+
+.file-url {
+  display: block;
+  word-break: break-all;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.file-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.action-btn {
+  flex: 1;
+  margin: 0 5px;
+  font-size: 14px;
+  padding: 8px 0;
+  border-radius: 4px;
+  color: white;
+}
+
+.btn-open {
+  background-color: #1890ff;
+}
+
+.btn-download {
+  background-color: #52c41a;
+}
+
+.btn-copy {
+  background-color: #D33A31;
 } 

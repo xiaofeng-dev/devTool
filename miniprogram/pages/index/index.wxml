@@ -5,12 +5,12 @@
     <view class="tab {{activeTab === 'incomplete' ? 'active' : ''}}" 
           bindtap="switchTab" 
           data-tab="incomplete">
-      未完成({{incompleteItems.length}})
+      未完成({{incompleteTotal}})
     </view>
     <view class="tab {{activeTab === 'completed' ? 'active' : ''}}" 
           bindtap="switchTab" 
           data-tab="completed">
-      已完成({{completedItems.length}})
+      已完成({{completedTotal}})
     </view>
   </view>
 
@@ -33,8 +33,9 @@
       wx:if="{{activeTab === 'incomplete'}}"
       scroll-top="{{incompleteScrollTop}}"
       bindscroll="onIncompleteScroll"
+      bindscrolltolower="onScrollToBottom"
       enhanced="true"
-      show-scrollbar="false"
+      show-scrollbar="true"
       bounces="true"
       enable-back-to-top="true"
       id="incompleteScroll">
@@ -51,14 +52,31 @@
           <view class="list-item-content">
             <view class="item-title">{{item.name}}</view>
             <view class="item-subtitle">{{item.artist}}{{item.album ? ' · ' + item.album : ''}}</view>
-            <view class="item-date">{{formatDate(item.createdAt)}}</view>
+            <view class="item-date">{{formatDate(item.createTime)}}</view>
           </view>
           <view class="item-arrow">
             <text class="arrow">〉</text>
           </view>
         </view>
+        
+        <!-- 底部分页控件 -->
+        <view class="pagination-controls">
+          <view class="page-info">
+            <text>当前 {{displayIncompleteItems.length}}/{{incompleteTotal}} 条</text>
+          </view>
+          <view class="loading-btn" bindtap="loadIncompleteItems" wx:if="{{incompleteHasMore && !loading}}">
+            <text>加载更多</text>
+          </view>
+          <view class="loading-more" wx:if="{{loading && activeTab === 'incomplete'}}">
+            <view class="loading-icon"></view>
+            <text>加载中...</text>
+          </view>
+          <view class="no-more" wx:if="{{!incompleteHasMore && displayIncompleteItems.length > 0}}">
+            <text>没有更多数据了</text>
+          </view>
+        </view>
       </block>
-      <view wx:elif="{{incompleteLoading}}" class="loading-tip">
+      <view wx:elif="{{loading}}" class="loading-tip">
         <view class="loading-icon"></view>
         正在加载数据...
       </view>
@@ -72,8 +90,9 @@
       wx:if="{{activeTab === 'completed'}}"
       scroll-top="{{completedScrollTop}}"
       bindscroll="onCompletedScroll"
+      bindscrolltolower="onScrollToBottom"
       enhanced="true"
-      show-scrollbar="false"
+      show-scrollbar="true"
       bounces="true"
       enable-back-to-top="true"
       id="completedScroll">
@@ -90,7 +109,7 @@
           <view class="list-item-content">
             <view class="item-title">{{item.name}}</view>
             <view class="item-subtitle">{{item.artist}}{{item.album ? ' · ' + item.album : ''}}</view>
-            <view class="item-date">完成于：{{formatDate(item.completedAt)}}</view>
+            <view class="item-date">完成于：{{formatDate(item.updateTime)}}</view>
           </view>
           <view class="item-completed">
             <icon type="success" size="16" color="#52c41a"></icon>
@@ -99,8 +118,25 @@
             <text class="arrow">〉</text>
           </view>
         </view>
+        
+        <!-- 底部分页控件 -->
+        <view class="pagination-controls">
+          <view class="page-info">
+            <text>当前 {{displayCompletedItems.length}}/{{completedTotal}} 条</text>
+          </view>
+          <view class="loading-btn" bindtap="loadCompletedItems" wx:if="{{completedHasMore && !loading}}">
+            <text>加载更多</text>
+          </view>
+          <view class="loading-more" wx:if="{{loading && activeTab === 'completed'}}">
+            <view class="loading-icon"></view>
+            <text>加载中...</text>
+          </view>
+          <view class="no-more" wx:if="{{!completedHasMore && displayCompletedItems.length > 0}}">
+            <text>没有更多数据了</text>
+          </view>
+        </view>
       </block>
-      <view wx:elif="{{completedLoading}}" class="loading-tip">
+      <view wx:elif="{{loading}}" class="loading-tip">
         <view class="loading-icon"></view>
         正在加载数据...
       </view>

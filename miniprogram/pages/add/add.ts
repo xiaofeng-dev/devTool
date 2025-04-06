@@ -1,4 +1,5 @@
 import { musicService } from '../../utils/music';
+import { checkLogin } from '../../utils/auth';
 
 Page({
   data: {
@@ -8,13 +9,28 @@ Page({
       album: '',
       notes: '',
       priority: 'normal' as 'normal' | 'important' | 'urgent',
+      flag: false, // 完成状态标志，默认未完成
     },
     tempImageUrl: '', // 临时图片路径
     tempImageFile: '', // 临时图片文件路径（用于上传）
+    musicFileName: '', // 音乐文件名
+    tempMusicFile: '', // 临时音乐文件路径（用于上传）
+  },
+
+  onLoad() {
+    // 检查登录状态
+    if (!checkLogin()) {
+      return;
+    }
   },
 
   // 选择图片
   chooseImage() {
+    // 检查登录状态
+    if (!checkLogin()) {
+      return;
+    }
+    
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
@@ -89,8 +105,35 @@ Page({
     return true;
   },
 
+  // 选择音乐文件
+  chooseMusicFile() {
+    // 检查登录状态
+    if (!checkLogin()) {
+      return;
+    }
+    
+    wx.chooseMessageFile({
+      count: 1,
+      type: 'file',
+      extension: ['mp3', 'wav', 'ogg'],
+      success: (res) => {
+        const tempFilePath = res.tempFiles[0].path;
+        const fileName = res.tempFiles[0].name;
+        this.setData({
+          musicFileName: fileName,
+          tempMusicFile: tempFilePath
+        });
+      }
+    });
+  },
+
   // 保存音乐请求
-  saveMusic() {
+  async saveMusic() {
+    // 检查登录状态
+    if (!checkLogin()) {
+      return;
+    }
+    
     if (!this.validateForm()) {
       return;
     }
@@ -99,21 +142,32 @@ Page({
       title: '保存中...',
     });
 
-    // 如果有图片，先上传图片
-    const saveData = () => {
-      // 实际项目中这里应该上传图片到服务器，但微信小程序Demo中我们保存到本地
-      const imageUrl = this.data.tempImageUrl || ''; // 在实际项目中，这里应该是服务器返回的URL
+    try {
+      let imageUrl = '';
+      let fileUrl = '';
       
-      // 保存音乐请求
-      musicService.addItem({
+      // 如果有图片，先上传图片
+      if (this.data.tempImageFile) {
+        imageUrl = await musicService.uploadFile(this.data.tempImageFile, 1);
+      }
+      
+      // 如果有音乐文件，上传音乐文件
+      if (this.data.tempMusicFile) {
+        fileUrl = await musicService.uploadFile(this.data.tempMusicFile, 2);
+      }
+      
+      // 保存音乐信息
+      await musicService.add({
         name: this.data.formData.name,
         artist: this.data.formData.artist,
         album: this.data.formData.album || '',
-        notes: this.data.formData.notes || '',
-        priority: this.data.formData.priority,
-        imageUrl: imageUrl,
+        remark: this.data.formData.notes || '',
+        level: this.getPriorityLevel(),
+        flag: false, // 默认未完成
+        imageUrl,
+        fileUrl
       });
-
+      
       wx.hideLoading();
       
       wx.showToast({
@@ -129,9 +183,24 @@ Page({
           }, 1500);
         }
       });
-    };
-
-    // 执行保存
-    saveData();
+    } catch (error) {
+      wx.hideLoading();
+      wx.showToast({
+        title: '保存失败',
+        icon: 'error'
+      });
+      console.error('保存失败:', error);
+    }
+  },
+  
+  // 获取优先级对应的数字
+  getPriorityLevel(): string {
+    const priority = this.data.formData.priority;
+    switch (priority) {
+      case 'normal': return '1';
+      case 'important': return '2';
+      case 'urgent': return '3';
+      default: return '1';
+    }
   }
 }) 

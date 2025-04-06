@@ -1,7 +1,10 @@
 import { musicService } from '../../utils/music';
+import { isLoggedIn, logout } from '../../utils/auth';
 
 // 获取应用实例
 const app = getApp<IAppOption>()
+
+const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0';
 
 Page({
   data: {
@@ -11,6 +14,9 @@ Page({
     incompleteCount: 0,
     completedCount: 0,
     totalCount: 0,
+    isLoggedIn: false,
+    username: '',
+    avatarUrl: defaultAvatarUrl
   },
 
   onLoad() {
@@ -31,22 +37,33 @@ Page({
     }
 
     this.updateStats();
+    this.updateLoginStatus();
   },
 
   onShow() {
     this.updateStats();
+    this.updateLoginStatus();
   },
 
   // 更新统计数据
-  updateStats() {
-    const incompleteItems = musicService.getIncompleteItems();
-    const completedItems = musicService.getCompletedItems();
-    
-    this.setData({
-      incompleteCount: incompleteItems.length,
-      completedCount: completedItems.length,
-      totalCount: incompleteItems.length + completedItems.length
-    });
+  async updateStats() {
+    try {
+      const incompleteItems = await musicService.getIncompleteItems();
+      const completedItems = await musicService.getCompletedItems();
+      
+      this.setData({
+        incompleteCount: incompleteItems.length || 0,
+        completedCount: completedItems.length || 0,
+        totalCount: (incompleteItems.length || 0) + (completedItems.length || 0)
+      });
+    } catch (error) {
+      console.error('获取统计数据失败:', error);
+      this.setData({
+        incompleteCount: 0,
+        completedCount: 0,
+        totalCount: 0
+      });
+    }
   },
 
   // 获取用户信息
@@ -98,27 +115,75 @@ Page({
     });
   },
 
-  // 清空数据
-  clearData() {
+  // 更新登录状态
+  updateLoginStatus() {
+    const loggedIn = isLoggedIn();
+    const username = wx.getStorageSync('username') || '';
+    
+    this.setData({
+      isLoggedIn: loggedIn,
+      username
+    });
+  },
+  
+  // 跳转到登录页
+  navigateToLogin() {
+    if (this.data.isLoggedIn) {
+      // 已登录时显示是否登出的确认框
+      wx.showModal({
+        title: '提示',
+        content: '确定要退出登录吗？',
+        success: (res) => {
+          if (res.confirm) {
+            logout();
+            this.updateLoginStatus();
+          }
+        }
+      });
+    } else {
+      // 未登录时直接跳转到登录页
+      wx.navigateTo({
+        url: '/pages/login/login'
+      });
+    }
+  },
+  
+  // 登出
+  handleLogout() {
     wx.showModal({
-      title: '清空数据',
-      content: '确定要清空所有音乐请求数据吗？此操作不可恢复！',
+      title: '提示',
+      content: '确定要退出登录吗？',
       success: (res) => {
         if (res.confirm) {
-          // 实际应用中可以实现真正的清空数据功能
-          wx.showToast({
-            title: '数据已清空',
-            icon: 'success'
-          });
-          
-          // 更新统计数据
-          this.setData({
-            incompleteCount: 0,
-            completedCount: 0,
-            totalCount: 0
-          });
+          logout();
+          this.updateLoginStatus();
         }
       }
+    });
+  },
+  
+  // 修改密码
+  changePassword() {
+    wx.navigateTo({
+      url: '/pages/changePassword/changePassword'
+    });
+  },
+  
+  // 关于我们
+  aboutUs() {
+    wx.showModal({
+      title: '关于我们',
+      content: '音乐收藏助手 v1.0.0\n帮助您收集和管理喜爱的音乐',
+      showCancel: false
+    });
+  },
+  
+  // 联系客服
+  contactCustomerService() {
+    wx.showModal({
+      title: '联系客服',
+      content: '如有任何问题，请联系我们的客服团队。\n\n客服邮箱：support@example.com',
+      showCancel: false
     });
   }
 }) 

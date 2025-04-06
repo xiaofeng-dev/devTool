@@ -21,7 +21,7 @@
     "compileHotReLoad": false,
     "skylineRenderEnable": true,
     "es6": true,
-    "urlCheck": true,
+    "urlCheck": false,
     "checkSiteMap": true
   },
   "simulatorType": "wechat",
@@ -32,7 +32,7 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "libVersion": "2.30.2",
+  "libVersion": "3.0.2",
   "packOptions": {
     "ignore": [],
     "include": []
