@@ -13,13 +13,11 @@
   <!-- 音乐详情 -->
   <view class="music-detail" wx:elif="{{musicItem}}">
     <view class="detail-header">
-      <view class="item-cover" bindtap="chooseImage">
+      <view class="item-cover">
         <image wx:if="{{musicItem.imageUrl}}" src="{{musicItem.imageUrl}}" mode="aspectFill"></image>
         <view wx:else class="cover-placeholder">
-          <text class="upload-icon">📷</text>
-          <text class="upload-text">点击更换</text>
+          <text class="upload-text">暂无封面</text>
         </view>
-        <view class="edit-cover" wx:if="{{isEditMode}}">点击更换封面</view>
       </view>
       <view class="item-info">
         <view class="item-field" wx:if="{{!isEditMode}}">
@@ -87,17 +85,16 @@
       <view class="section-content download-url">
         <text selectable="true" class="file-url">{{musicItem.fileUrl}}</text>
         <view class="file-actions">
-          <button class="action-btn btn-open" bindtap="openMusicFile">播放</button>
+          <button class="action-btn btn-open" bindtap="openMusicFile">播放音乐</button>
           <button class="action-btn btn-copy" bindtap="copyDownloadUrl">复制链接</button>
         </view>
       </view>
     </view>
     
-    <view class="action-buttons">
-      <button class="btn-edit" bindtap="toggleEditMode">
-        {{isEditMode ? '取消' : '编辑信息'}}
-      </button>
-      <button wx:if="{{isEditMode}}" class="btn-save" bindtap="saveChanges">保存</button>
+    <!-- 提示功能受限 -->
+    <view class="feature-notice">
+      <icon type="info" size="16" color="#3a87ad"></icon>
+      <text class="notice-text">当前仅提供查询功能</text>
     </view>
   </view>
 

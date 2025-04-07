@@ -362,3 +362,20 @@
 .loading-btn:active {
   background-color: #f0f0f0;
 }
+
+.feature-notice {
+  width: 94%;
+  margin: 10px auto;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #d9edf7;
+  border: 1px solid #bce8f1;
+  border-radius: 4px;
+  color: #3a87ad;
+}
+
+.notice-text {
+  font-size: 14px;
+  margin-left: 8px;
+}

@@ -23,6 +23,12 @@
              value="{{searchText}}"/>
     </view>
   </view>
+  
+  <!-- 功能提示条 -->
+  <view class="feature-notice">
+    <icon type="info" size="16" color="#3a87ad"></icon>
+    <text class="notice-text">当前仅提供音乐查询功能</text>
+  </view>
 
   <!-- 内容区域 -->
   <view class="content-area">
