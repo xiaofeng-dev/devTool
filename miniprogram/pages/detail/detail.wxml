@@ -1,9 +1,4 @@
 <view class="container">
-  <view class="back-nav" bindtap="navigateBack">
-    <view class="back-arrow">←</view>
-    <view class="back-text">返回</view>
-  </view>
-
   <!-- 加载中状态 -->
   <view class="loading-container" wx:if="{{loading}}">
     <view class="loading-icon"></view>
@@ -13,7 +8,7 @@
   <!-- 音乐详情 -->
   <view class="music-detail" wx:elif="{{musicItem}}">
     <view class="detail-header">
-      <view class="item-cover" bindtap="chooseImage">
+      <view class="item-cover" bindtap="{{isEditMode ? 'chooseImage' : 'previewImage'}}">
         <image wx:if="{{musicItem.imageUrl}}" src="{{musicItem.imageUrl}}" mode="aspectFill"></image>
         <view wx:else class="cover-placeholder">
           <text class="upload-icon">📷</text>

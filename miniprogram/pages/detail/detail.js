@@ -64,6 +64,17 @@ Page({
     return formatTime(new Date(timestamp));
   },
 
+  // 预览图片
+  previewImage: function() {
+    var item = this.data.item;
+    if (item && item.imageUrl) {
+      wx.previewImage({
+        current: item.imageUrl, // 当前显示图片的http链接
+        urls: [item.imageUrl] // 需要预览的图片http链接列表
+      });
+    }
+  },
+
   // 返回上一页
   navigateBack: function() {
     wx.navigateBack();
@@ -78,12 +89,8 @@ Page({
     return {
       title: title,
       path: path,
-      success: function(res) {
-        console.log('分享成功', res);
-      },
-      fail: function(res) {
-        console.log('分享失败', res);
-      }
+      imageUrl: item && item.imageUrl ? item.imageUrl : 'https://minio.xiaofeng.show/music-cover/card_image.png',
+      desc: item ? `快来看看"${item.name}"的音乐详情吧！` : '整理您喜爱的音乐，轻松找到每一首好听的歌'
     };
   },
 
@@ -96,12 +103,7 @@ Page({
     return {
       title: title,
       query: query,
-      success: function(res) {
-        console.log('分享朋友圈成功', res);
-      },
-      fail: function(res) {
-        console.log('分享朋友圈失败', res);
-      }
+      imageUrl: item && item.imageUrl ? item.imageUrl : 'https://minio.xiaofeng.show/music-cover/card_image.png'
     };
   }
 }); 

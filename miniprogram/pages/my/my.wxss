@@ -143,4 +143,21 @@
 .version {
   font-size: 14px;
   color: #999;
+}
+
+.notice-bar {
+  width: 94%;
+  margin: 10px auto 15px;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #d9edf7;
+  border: 1px solid #bce8f1;
+  border-radius: 4px;
+  color: #3a87ad;
+}
+
+.notice-text {
+  font-size: 14px;
+  margin-left: 8px;
 } 

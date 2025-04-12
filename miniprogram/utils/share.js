@@ -1,9 +1,9 @@
 // 全局分享配置
 const globalShareInfo = {
-  title: '音乐查找助手',
-  desc: '帮你快速查找和收集音乐资源',
+  title: '音乐查找助手 - 您的音乐收藏管家',
+  desc: '整理您喜爱的音乐，轻松找到每一首好听的歌',
   path: '/pages/index/index',
-  imageUrl: '/images/home_selected.png'
+  imageUrl: 'https://minio.xiaofeng.show/music-cover/card_image.png'
 };
 
 // 更新全局分享信息
@@ -27,7 +27,8 @@ function configurePageShare(pageObj) {
       return {
         title: globalShareInfo.title,
         path: globalShareInfo.path,
-        imageUrl: globalShareInfo.imageUrl
+        imageUrl: globalShareInfo.imageUrl,
+        desc: globalShareInfo.desc
       };
     };
   }

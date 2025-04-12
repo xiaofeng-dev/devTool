@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音乐查找助手分享卡片</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    }
+    
+    .share-card {
+      width: 500px;
+      height: 400px;
+      background: linear-gradient(135deg, #D33A31 0%, #A31F25 100%);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+    }
+    
+    .card-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      box-sizing: border-box;
+      z-index: 5;
+    }
+    
+    .pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.05)"/></svg>');
+      opacity: 0.3;
+      z-index: 1;
+    }
+    
+    .waves {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.08)" d="M0,128L48,117.3C96,107,192,85,288,90.7C384,96,480,128,576,149.3C672,171,768,181,864,165.3C960,149,1056,107,1152,96C1248,85,1344,107,1392,117.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+      z-index: 2;
+    }
+    
+    .vinyl-record {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #1a1a1a 0%, #000000 70%);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      right: -40px;
+      top: 40px;
+      z-index: 3;
+    }
+    
+    .vinyl-record::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #D33A31;
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.1), 
+                  0 0 0 20px rgba(255, 255, 255, 0.05),
+                  0 0 0 30px rgba(255, 255, 255, 0.02);
+    }
+    
+    .app-logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .music-icon {
+      width: 70px;
+      height: 70px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-right: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .app-name {
+      font-size: 36px;
+      font-weight: bold;
+      color: white;
+      margin: 0 0 10px 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .app-slogan {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 10px 0 20px 0;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    .app-features {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .feature {
+      padding: 8px 15px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      color: white;
+      font-size: 14px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+    
+    .feature:hover {
+      transform: translateY(-3px);
+    }
+    
+    .app-prompt {
+      position: absolute;
+      bottom: 20px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+      padding: 8px 16px;
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      backdrop-filter: blur(3px);
+    }
+    
+    .music-notes-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 4;
+    }
+    
+    .note-animation {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.7);
+      animation: float 8s ease-in-out infinite;
+      text-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .note-1 { top: 20%; left: 10%; font-size: 28px; animation-delay: 0s; }
+    .note-2 { top: 30%; right: 25%; font-size: 24px; animation-delay: 1.5s; }
+    .note-3 { bottom: 35%; left: 15%; font-size: 26px; animation-delay: 3s; }
+    .note-4 { bottom: 25%; right: 20%; font-size: 32px; animation-delay: 4.5s; }
+    .note-5 { top: 45%; left: 25%; font-size: 22px; animation-delay: 6s; }
+    
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.7; }
+      100% { transform: translateY(-100px) rotate(15deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="share-card">
+    <div class="pattern"></div>
+    <div class="waves"></div>
+    <div class="vinyl-record"></div>
+    
+    <div class="music-notes-container">
+      <div class="note-animation note-1">♪</div>
+      <div class="note-animation note-2">♫</div>
+      <div class="note-animation note-3">♩</div>
+      <div class="note-animation note-4">♬</div>
+      <div class="note-animation note-5">♪</div>
+    </div>
+    
+    <div class="card-content">
+      <div class="app-logo">
+        <div class="music-icon">🎵</div>
+      </div>
+      <h1 class="app-name">音乐查找助手</h1>
+      <p class="app-slogan">整理你喜爱的音乐，轻松找到好听的歌</p>
+      
+      <div class="app-features">
+        <div class="feature">收集管理</div>
+        <div class="feature">分类整理</div>
+        <div class="feature">简易分享</div>
+      </div>
+      
+      <div class="app-prompt">点击或长按了解更多</div>
+    </div>
+  </div>
+</body>
+</html> 

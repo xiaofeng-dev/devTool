@@ -56,8 +56,5 @@
     "downloadFile": 10000
   },
   "enableShareTimeline": true,
-  "enableShareAppMessage": true,
-  "shareTimelineOptions": {
-    "useContentShareButton": true
-  }
+  "enableShareAppMessage": true
 }

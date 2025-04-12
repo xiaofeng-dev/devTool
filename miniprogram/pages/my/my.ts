@@ -1,5 +1,6 @@
 import { musicService } from '../../utils/music';
 import { isLoggedIn, logout } from '../../utils/auth';
+import { apiBaseUrl } from '../../utils/util';
 
 // 获取应用实例
 const app = getApp<IAppOption>()
@@ -48,6 +49,36 @@ Page({
   // 更新统计数据
   async updateStats() {
     try {
+      // 向后台发送请求获取未完成数量
+      const incompleteResult = await musicService.getList({
+        flag: false,
+        pageNum: 1,
+        pageSize: 1  // 只需要获取总数，所以pageSize设为1即可
+      });
+      
+      // 向后台发送请求获取已完成数量
+      const completedResult = await musicService.getList({
+        flag: true,
+        pageNum: 1,
+        pageSize: 1  // 只需要获取总数，所以pageSize设为1即可
+      });
+      
+      // 更新数据，使用从后台获取的total值
+      this.setData({
+        incompleteCount: incompleteResult.total || 0,
+        completedCount: completedResult.total || 0,
+        totalCount: (incompleteResult.total || 0) + (completedResult.total || 0)
+      });
+    } catch (error) {
+      console.error('获取统计数据失败:', error);
+      // 出错时使用本地方法获取
+      this.getStatsLocally();
+    }
+  },
+
+  // 本地获取统计数据（作为备选方案）
+  async getStatsLocally() {
+    try {
       const incompleteItems = await musicService.getIncompleteItems();
       const completedItems = await musicService.getCompletedItems();
       
@@ -57,7 +88,7 @@ Page({
         totalCount: (incompleteItems.length || 0) + (completedItems.length || 0)
       });
     } catch (error) {
-      console.error('获取统计数据失败:', error);
+      console.error('获取本地统计数据失败:', error);
       this.setData({
         incompleteCount: 0,
         completedCount: 0,
@@ -110,7 +141,16 @@ Page({
   showFeedback() {
     wx.showModal({
       title: '意见反馈',
-      content: '感谢您的使用！如有任何建议或问题，请联系我们：\n\n电子邮件：support@example.com',
+      content: '感谢您的使用！如有任何建议或问题，请联系我们：\n\n电子邮件：zhangyuliang94@126.com',
+      showCancel: false
+    });
+  },
+
+  // 版本说明
+  showVersionInfo() {
+    wx.showModal({
+      title: '版本说明',
+      content: `当前版本：1.0.0\n\n更新内容：\n1. 支持音乐信息管理\n2. 支持音乐文件链接管理\n3. 优化界面交互体验\n4. 支持按优先级排序\n5. 增加图片预览功能`,
       showCancel: false
     });
   },
@@ -185,5 +225,24 @@ Page({
       content: '如有任何问题，请联系我们的客服团队。\n\n客服邮箱：support@example.com',
       showCancel: false
     });
+  },
+
+  // 分享到朋友
+  onShareAppMessage() {
+    return {
+      title: '音乐查找助手 - 您的音乐收藏管家',
+      path: '/pages/my/my',
+      imageUrl: 'https://minio.xiaofeng.show/music-cover/card_image.png',
+      desc: '整理您喜爱的音乐，轻松找到每一首好听的歌'
+    };
+  },
+  
+  // 分享到朋友圈
+  onShareTimeline() {
+    return {
+      title: '音乐查找助手 - 您的音乐收藏管家',
+      query: '',
+      imageUrl: 'https://minio.xiaofeng.show/music-cover/card_image.png'
+    };
   }
 }) 

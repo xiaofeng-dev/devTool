@@ -6,30 +6,6 @@
   position: relative;
 }
 
-/* 返回导航 */
-.back-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding: 16px;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  background-color: rgba(255,255,255,0.9);
-  border-radius: 30px;
-  margin: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.back-arrow {
-  font-size: 20px;
-  margin-right: 4px;
-}
-
-.back-text {
-  font-size: 14px;
-}
-
 /* 加载中状态 */
 .loading-container {
   display: flex;

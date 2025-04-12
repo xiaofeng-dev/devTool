@@ -141,6 +141,17 @@ Page({
     });
   },
   
+  // 预览图片
+  previewImage() {
+    const { musicItem } = this.data;
+    if (musicItem && musicItem.imageUrl) {
+      wx.previewImage({
+        current: musicItem.imageUrl, // 当前显示图片的http链接
+        urls: [musicItem.imageUrl] // 需要预览的图片http链接列表
+      });
+    }
+  },
+  
   // 名称输入
   onNameChange(e: any) {
     this.setData({
@@ -482,7 +493,8 @@ Page({
     return {
       title: `音乐：${item.name} - ${item.artist}`,
       path: `/pages/detail/detail?id=${item.id}`,
-      imageUrl: item.imageUrl || '/images/home_selected.png'
+      imageUrl: item.imageUrl || 'https://minio.xiaofeng.show/music-cover/card_image.png',
+      desc: `快来看看"${item.name}"的音乐详情吧！`
     };
   },
   
@@ -494,7 +506,7 @@ Page({
     return {
       title: `音乐：${item.name} - ${item.artist}`,
       query: `id=${item.id}`,
-      imageUrl: item.imageUrl || '/images/home_selected.png'
+      imageUrl: item.imageUrl || 'https://minio.xiaofeng.show/music-cover/card_image.png'
     };
   }
 }) 

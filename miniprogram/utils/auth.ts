@@ -32,11 +32,16 @@ export const getAuthHeader = (): Record<string, string> => {
 };
 
 /**
- * 检查登录状态，未登录则跳转到登录页
+ * 检查登录状态，但是不再强制要求登录
  * @param redirectPath 重定向路径
- * @returns 返回是否已登录
+ * @returns 始终返回true，允许未登录用户使用各项功能
  */
 export const checkLogin = (redirectPath?: string): boolean => {
+  // 由于某些手机上登录功能有问题，现在不再强制要求登录
+  return true;
+  
+  // 原始代码保留但不再执行
+  /*
   if (!isLoggedIn()) {
     // 保存当前页面路径，登录后返回
     if (redirectPath) {
@@ -60,6 +65,7 @@ export const checkLogin = (redirectPath?: string): boolean => {
     return false;
   }
   return true;
+  */
 };
 
 /**
