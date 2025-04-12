@@ -103,5 +103,16 @@ Page({
         console.log('分享朋友圈失败', res);
       }
     };
+  },
+
+  // 预览图片
+  previewImage: function() {
+    var item = this.data.item;
+    if (item && item.imageUrl) {
+      wx.previewImage({
+        current: item.imageUrl, // 当前显示图片的http链接
+        urls: [item.imageUrl] // 需要预览的图片http链接列表
+      });
+    }
   }
 }); 

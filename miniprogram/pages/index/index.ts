@@ -285,18 +285,19 @@ Page({
   // 分享到朋友
   onShareAppMessage() {
     return {
-      title: '音乐查找助手 - 帮你管理音乐收藏',
+      title: '音乐查找助手 - 您的音乐收藏管家',
       path: '/pages/index/index',
-      imageUrl: '/images/home_selected.png'
+      imageUrl: 'https://minio.xiaofeng.show/music-cover/card_image.png',
+      desc: '整理您喜爱的音乐，轻松找到每一首好听的歌'
     };
   },
   
   // 分享到朋友圈
   onShareTimeline() {
     return {
-      title: '音乐查找助手 - 帮你管理音乐收藏',
+      title: '音乐查找助手 - 您的音乐收藏管家',
       query: '',
-      imageUrl: '/images/home_selected.png'
+      imageUrl: 'https://minio.xiaofeng.show/music-cover/card_image.png'
     };
   }
 })

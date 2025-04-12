@@ -25,7 +25,9 @@ Page({
     loading: true,
     isEditMode: false,
     priorityOptions: ['普通', '重要', '紧急'],
-    priorityIndex: 0
+    priorityIndex: 0,
+    tempImageUrl: '',
+    tempImageFile: ''
   },
 
   onLoad(options: any) {
@@ -244,5 +246,41 @@ Page({
       title: `音乐 - ${this.data.musicItem?.name}`,
       query: `id=${this.data.musicId}`
     });
+  },
+  
+  // 选择图片
+  chooseImage() {
+    // 检查登录状态
+    if (!checkLogin() || !this.data.isEditMode) return;
+    
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera'],
+      camera: 'back',
+      success: (res) => {
+        const tempFilePath = res.tempFiles[0].tempFilePath;
+        this.setData({
+          tempImageUrl: tempFilePath,
+          tempImageFile: tempFilePath,
+          'musicItem.imageUrl': tempFilePath // 显示预览图
+        });
+      }
+    });
+  },
+  
+  // 预览图片
+  previewImage() {
+    const { musicItem } = this.data;
+    if (musicItem && musicItem.imageUrl) {
+      wx.previewImage({
+        current: musicItem.imageUrl, // 当前显示图片的http链接
+        urls: [musicItem.imageUrl] // 需要预览的图片http链接列表
+      });
+    }
+  },
+  
+  // 名称输入
+  onNameChange(e: any) {
   }
 }); 

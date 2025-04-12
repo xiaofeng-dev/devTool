@@ -244,5 +244,24 @@ Page(app.applyShareConfig({
     if (!timestamp) return '';
     var date = new Date(timestamp);
     return date.getMonth() + 1 + '-' + date.getDate();
+  },
+
+  // 分享到朋友
+  onShareAppMessage: function() {
+    return {
+      title: '音乐查找助手 - 您的音乐收藏管家',
+      path: '/pages/index/index',
+      imageUrl: 'https://minio.xiaofeng.show/music-cover/card_image.png',
+      desc: '整理您喜爱的音乐，轻松找到每一首好听的歌'
+    };
+  },
+  
+  // 分享到朋友圈
+  onShareTimeline: function() {
+    return {
+      title: '音乐查找助手 - 您的音乐收藏管家',
+      query: '',
+      imageUrl: 'https://minio.xiaofeng.show/music-cover/card_image.png'
+    };
   }
 })); 

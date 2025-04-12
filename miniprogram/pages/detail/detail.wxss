@@ -398,18 +398,12 @@
 }
 
 .feature-notice {
-  width: 94%;
-  margin: 15px auto;
+  margin: 20rpx 0;
+  padding: 20rpx;
+  background-color: #FFF9E6;
+  border-radius: 10rpx;
+  font-size: 24rpx;
+  color: #FF9500;
   display: flex;
   align-items: center;
-  padding: 10px 15px;
-  background-color: #d9edf7;
-  border: 1px solid #bce8f1;
-  border-radius: 4px;
-  color: #3a87ad;
 }
-
-.notice-text {
-  font-size: 14px;
-  margin-left: 8px;
-} 

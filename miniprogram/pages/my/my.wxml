@@ -57,6 +57,18 @@
       <text class="menu-text">意见反馈</text>
       <text class="menu-arrow">〉</text>
     </view>
+    <view class="menu-item" bindtap="showVersionInfo">
+      <view class="menu-icon">
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+          <path d="M512 962.56c-249.856 0-450.56-200.704-450.56-450.56s200.704-450.56 450.56-450.56 450.56 200.704 450.56 450.56-200.704 450.56-450.56 450.56z m0-840.704c-215.04 0-390.144 175.104-390.144 390.144s175.104 390.144 390.144 390.144 390.144-175.104 390.144-390.144-175.104-390.144-390.144-390.144z" fill="#666666"></path>
+          <path d="M512 512m-60.416 0a60.416 60.416 0 1 0 120.832 0 60.416 60.416 0 1 0-120.832 0Z" fill="#666666"></path>
+          <path d="M512 307.2m-60.416 0a60.416 60.416 0 1 0 120.832 0 60.416 60.416 0 1 0-120.832 0Z" fill="#666666"></path>
+          <path d="M512 716.8m-60.416 0a60.416 60.416 0 1 0 120.832 0 60.416 60.416 0 1 0-120.832 0Z" fill="#666666"></path>
+        </svg>
+      </view>
+      <text class="menu-text">版本说明</text>
+      <text class="menu-arrow">〉</text>
+    </view>
   </view>
 
   <view class="footer">

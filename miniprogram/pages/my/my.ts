@@ -1,5 +1,6 @@
 import { musicService } from '../../utils/music';
 import { isLoggedIn, logout } from '../../utils/auth';
+import { apiBaseUrl } from '../../utils/util';
 
 // 获取应用实例
 const app = getApp<IAppOption>()
@@ -48,6 +49,36 @@ Page({
   // 更新统计数据
   async updateStats() {
     try {
+      // 向后台发送请求获取未完成数量
+      const incompleteResult = await musicService.getList({
+        flag: false,
+        pageNum: 1,
+        pageSize: 1  // 只需要获取总数，所以pageSize设为1即可
+      });
+      
+      // 向后台发送请求获取已完成数量
+      const completedResult = await musicService.getList({
+        flag: true,
+        pageNum: 1,
+        pageSize: 1  // 只需要获取总数，所以pageSize设为1即可
+      });
+      
+      // 更新数据，使用从后台获取的total值
+      this.setData({
+        incompleteCount: incompleteResult.total || 0,
+        completedCount: completedResult.total || 0,
+        totalCount: (incompleteResult.total || 0) + (completedResult.total || 0)
+      });
+    } catch (error) {
+      console.error('获取统计数据失败:', error);
+      // 出错时使用本地方法获取
+      this.getStatsLocally();
+    }
+  },
+
+  // 本地获取统计数据（作为备选方案）
+  async getStatsLocally() {
+    try {
       const incompleteItems = await musicService.getIncompleteItems();
       const completedItems = await musicService.getCompletedItems();
       
@@ -57,7 +88,7 @@ Page({
         totalCount: (incompleteItems.length || 0) + (completedItems.length || 0)
       });
     } catch (error) {
-      console.error('获取统计数据失败:', error);
+      console.error('获取本地统计数据失败:', error);
       this.setData({
         incompleteCount: 0,
         completedCount: 0,

@@ -1,9 +1,4 @@
 <view class="container">
-  <view class="back-nav" bindtap="navigateBack">
-    <view class="back-arrow">←</view>
-    <view class="back-text">返回</view>
-  </view>
-
   <!-- 加载中状态 -->
   <view class="loading-container" wx:if="{{loading}}">
     <view class="loading-icon"></view>
@@ -13,7 +8,7 @@
   <!-- 音乐详情 -->
   <view class="music-detail" wx:elif="{{musicItem}}">
     <view class="detail-header">
-      <view class="item-cover">
+      <view class="item-cover" bindtap="{{isEditMode ? 'chooseImage' : 'previewImage'}}">
         <image wx:if="{{musicItem.imageUrl}}" src="{{musicItem.imageUrl}}" mode="aspectFill"></image>
         <view wx:else class="cover-placeholder">
           <text class="upload-text">暂无封面</text>
@@ -89,12 +84,6 @@
           <button class="action-btn btn-copy" bindtap="copyDownloadUrl">复制链接</button>
         </view>
       </view>
-    </view>
-    
-    <!-- 提示功能受限 -->
-    <view class="feature-notice">
-      <icon type="info" size="16" color="#3a87ad"></icon>
-      <text class="notice-text">当前仅提供查询功能</text>
     </view>
   </view>
 
